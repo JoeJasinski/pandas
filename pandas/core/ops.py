@@ -397,56 +397,61 @@ for key in _op_names:
         _op_descriptions[reverse_op]['reversed'] = True
         _op_descriptions[reverse_op]['reverse'] = key
 
-_flex_doc_SERIES = """
-{desc} of series and other, element-wise (binary operator `{op_name}`).
 
-Equivalent to ``{equiv}``, but with support to substitute a fill_value for
-missing data in one of the inputs.
+def _flex_doc_SERIES(**kwargs):
 
-Parameters
-----------
-other : Series or scalar value
-fill_value : None or float value, default None (NaN)
-    Fill existing missing (NaN) values, and any new element needed for
-    successful Series alignment, with this value before computation.
-    If data in both corresponding Series locations is missing
-    the result will be missing
-level : int or name
-    Broadcast across a level, matching Index values on the
-    passed MultiIndex level
+    template = """
+    {desc} of series and other, element-wise (binary operator `{op_name}`).
 
-Returns
--------
-result : Series
+    Equivalent to ``{equiv}``, but with support to substitute a fill_value for
+    missing data in one of the inputs.
 
-Examples
---------
->>> a = pd.Series([1, 1, 1, np.nan], index=['a', 'b', 'c', 'd'])
->>> a
-a    1.0
-b    1.0
-c    1.0
-d    NaN
-dtype: float64
->>> b = pd.Series([1, np.nan, 1, np.nan], index=['a', 'b', 'd', 'e'])
->>> b
-a    1.0
-b    NaN
-d    1.0
-e    NaN
-dtype: float64
->>> a.add(b, fill_value=0)
-a    2.0
-b    1.0
-c    1.0
-d    1.0
-e    NaN
-dtype: float64
+    Parameters
+    ----------
+    other : Series or scalar value
+    fill_value : None or float value, default None (NaN)
+        Fill existing missing (NaN) values, and any new element needed for
+        successful Series alignment, with this value before computation.
+        If data in both corresponding Series locations is missing
+        the result will be missing
+    level : int or name
+        Broadcast across a level, matching Index values on the
+        passed MultiIndex level
 
-See also
---------
-Series.{reverse}
-"""
+    Returns
+    -------
+    result : Series
+
+    Examples
+    --------
+    >>> a = pd.Series([1, 1, 1, np.nan], index=['a', 'b', 'c', 'd'])
+    >>> a
+    a    1.0
+    b    1.0
+    c    1.0
+    d    NaN
+    dtype: float64
+    >>> b = pd.Series([1, np.nan, 1, np.nan], index=['a', 'b', 'd', 'e'])
+    >>> b
+    a    1.0
+    b    NaN
+    d    1.0
+    e    NaN
+    dtype: float64
+    >>> a.add(b, fill_value=0)
+    a    2.0
+    b    1.0
+    c    1.0
+    d    1.0
+    e    NaN
+    dtype: float64
+
+    See also
+    --------
+    Series.{reverse}
+    """
+    return template.format(**kwargs)
+
 
 _arith_doc_FRAME = """
 Binary operator %s with support to substitute a fill_value for missing data in
@@ -502,99 +507,108 @@ d  1.0  NaN
 e  NaN  2.0
 """
 
-_flex_doc_FRAME = """
-{desc} of dataframe and other, element-wise (binary operator `{op_name}`).
 
-Equivalent to ``{equiv}``, but with support to substitute a fill_value for
-missing data in one of the inputs.
+def _flex_doc_FRAME(**kwargs):
 
-Parameters
-----------
-other : Series, DataFrame, or constant
-axis : {{0, 1, 'index', 'columns'}}
-    For Series input, axis to match Series index on
-fill_value : None or float value, default None
-    Fill existing missing (NaN) values, and any new element needed for
-    successful DataFrame alignment, with this value before computation.
-    If data in both corresponding DataFrame locations is missing
-    the result will be missing
-level : int or name
-    Broadcast across a level, matching Index values on the
-    passed MultiIndex level
+    template = """
+    {desc} of dataframe and other, element-wise (binary operator `{op_name}`).
 
-Notes
------
-Mismatched indices will be unioned together
+    Equivalent to ``{equiv}``, but with support to substitute a fill_value for
+    missing data in one of the inputs.
 
-Returns
--------
-result : DataFrame
+    Parameters
+    ----------
+    other : Series, DataFrame, or constant
+    axis : {{0, 1, 'index', 'columns'}}
+        For Series input, axis to match Series index on
+    fill_value : None or float value, default None
+        Fill existing missing (NaN) values, and any new element needed for
+        successful DataFrame alignment, with this value before computation.
+        If data in both corresponding DataFrame locations is missing
+        the result will be missing
+    level : int or name
+        Broadcast across a level, matching Index values on the
+        passed MultiIndex level
 
-Examples
---------
->>> a = pd.DataFrame([1, 1, 1, np.nan], index=['a', 'b', 'c', 'd'],
-                     columns=['one'])
->>> a
-   one
-a  1.0
-b  1.0
-c  1.0
-d  NaN
->>> b = pd.DataFrame(dict(one=[1, np.nan, 1, np.nan],
-                          two=[np.nan, 2, np.nan, 2]),
-                     index=['a', 'b', 'd', 'e'])
->>> b
-   one  two
-a  1.0  NaN
-b  NaN  2.0
-d  1.0  NaN
-e  NaN  2.0
->>> a.add(b, fill_value=0)
-   one  two
-a  2.0  NaN
-b  1.0  2.0
-c  1.0  NaN
-d  1.0  NaN
-e  NaN  2.0
+    Notes
+    -----
+    Mismatched indices will be unioned together
 
-See also
---------
-DataFrame.{reverse}
-"""
+    Returns
+    -------
+    result : DataFrame
 
-_flex_doc_PANEL = """
-{desc} of series and other, element-wise (binary operator `{op_name}`).
-Equivalent to ``{equiv}``.
+    Examples
+    --------
+    >>> a = pd.DataFrame([1, 1, 1, np.nan], index=['a', 'b', 'c', 'd'],
+                         columns=['one'])
+    >>> a
+       one
+    a  1.0
+    b  1.0
+    c  1.0
+    d  NaN
+    >>> b = pd.DataFrame(dict(one=[1, np.nan, 1, np.nan],
+                              two=[np.nan, 2, np.nan, 2]),
+                         index=['a', 'b', 'd', 'e'])
+    >>> b
+       one  two
+    a  1.0  NaN
+    b  NaN  2.0
+    d  1.0  NaN
+    e  NaN  2.0
+    >>> a.add(b, fill_value=0)
+       one  two
+    a  2.0  NaN
+    b  1.0  2.0
+    c  1.0  NaN
+    d  1.0  NaN
+    e  NaN  2.0
 
-Parameters
-----------
-other : DataFrame or Panel
-axis : {{items, major_axis, minor_axis}}
-    Axis to broadcast over
-
-Returns
--------
-Panel
-
-See also
---------
-Panel.{reverse}
-"""
+    See also
+    --------
+    DataFrame.{reverse}
+    """
+    return template.format(**kwargs)
 
 
-_agg_doc_PANEL = """
-Wrapper method for {op_name}
+def _flex_doc_PANEL(**kwargs):
+    template = """
+    {desc} of series and other, element-wise (binary operator `{op_name}`).
+    Equivalent to ``{equiv}``.
 
-Parameters
-----------
-other : DataFrame or Panel
-axis : {{items, major_axis, minor_axis}}
-    Axis to broadcast over
+    Parameters
+    ----------
+    other : DataFrame or Panel
+    axis : {{items, major_axis, minor_axis}}
+        Axis to broadcast over
 
-Returns
--------
-Panel
-"""
+    Returns
+    -------
+    Panel
+
+    See also
+    --------
+    Panel.{reverse}
+    """
+    return template.format(**kwargs)
+
+
+def _agg_doc_PANEL(**kwargs):
+    template = """
+    Wrapper method for {op_name}
+
+    Parameters
+    ----------
+    other : DataFrame or Panel
+    axis : {{items, major_axis, minor_axis}}
+        Axis to broadcast over
+
+    Returns
+    -------
+    Panel
+    """
+    return template.format(**kwargs)
 
 
 def _make_flex_doc(op_name, typ):
@@ -606,12 +620,13 @@ def _make_flex_doc(op_name, typ):
     Parameters
     ----------
     op_name : str {'__add__', '__sub__', ... '__eq__', '__ne__', ...}
-    typ : str {series, 'dataframe']}
+    typ : str {series, 'dataframe', 'panel']}
 
     Returns
     -------
     doc : str
     """
+
     op_name = op_name.replace('__', '')
     op_desc = _op_descriptions[op_name]
 
@@ -628,8 +643,10 @@ def _make_flex_doc(op_name, typ):
         base_doc = _flex_doc_PANEL
     else:
         raise AssertionError('Invalid typ argument.')
-    doc = base_doc.format(desc=op_desc['desc'], op_name=op_name,
-                          equiv=equiv, reverse=op_desc['reverse'])
+
+    doc = base_doc(desc=op_desc['desc'], op_name=op_name,
+                   equiv=equiv, reverse=op_desc['reverse'])
+
     return doc
 
 
@@ -1521,8 +1538,9 @@ def _flex_comp_method_FRAME(cls, op, special):
             result = mask_cmp_op(x, y, op, (np.ndarray, ABCSeries))
         return result
 
-    @Appender('Wrapper for flexible comparison methods {name}'
-              .format(name=op_name))
+    doc = 'Wrapper for flexible comparison methods {name}'.format(name=op_name)
+
+    @Appender(doc)
     def f(self, other, axis=default_axis, level=None):
 
         other = _align_method_FRAME(self, other, axis)
